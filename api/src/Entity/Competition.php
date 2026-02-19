@@ -22,7 +22,7 @@ class Competition
     #[ORM\Column(length: 36, nullable: true)]
     private ?string $req = null;
 
-    #[ORM\ManyToOne(inversedBy: 'competition')]
+    #[ORM\ManyToOne(inversedBy: 'competitions')]
     private Season $season;
 
     #[ORM\Column]

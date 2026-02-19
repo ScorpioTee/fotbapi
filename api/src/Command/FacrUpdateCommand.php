@@ -40,8 +40,8 @@ class FacrUpdateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $this->facrParserService->loadMatchStatistics();
-        return Command::SUCCESS;
+        // $this->facrParserService->loadMatchStatistics();
+        // return Command::SUCCESS;
 
         $competitionTableRepository = $this->entityManager->getRepository(CompetitionTable::class);
         $competitionRepository = $this->entityManager->getRepository(Competition::class);

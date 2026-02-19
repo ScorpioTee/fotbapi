@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use ApiPlatform\Metadata\Exception\RuntimeException;
 use App\Entity\Competition;
 use App\Entity\CompetitionTable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -17,19 +18,23 @@ class CompetitionTableRepository extends ServiceEntityRepository
         parent::__construct($registry, CompetitionTable::class);
     }
 
-    public function updateCompetitionTable(array $data)
+    public function updateCompetitionTable(?array $data)
     {
+        if ($data === null) {
+            throw new RuntimeException('Provided data are empty.');
+        }
         $this->getEntityManager()->beginTransaction();
         $competitionTableRepository = $this->_em->getRepository(CompetitionTable::class);
         $competitionRepository = $this->_em->getRepository(Competition::class);
-        $competition = $competitionRepository->findByReq($data[0]['req']);
+        $uuid = array_keys($data)[0];
+        $competition = $competitionRepository->findByReq($uuid);
         $competitionTables = $competitionTableRepository->findBy(['competition' => $competition]);
         foreach($competitionTables as $competitionTable)
         {
             $this->getEntityManager()->remove($competitionTable);
         }
 
-        foreach($data as $record)
+        foreach($data[$uuid] as $record)
         {
             $table = new CompetitionTable();
             $table->setCompetition($competition);

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CompetitionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompetitionRepository::class)]
 class Competition
@@ -11,9 +12,11 @@ class Competition
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['competition_table:read', 'competition_match:read'])]
     private int $id;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['competition_table:read', 'competition_match:read'])]
     private string $name;
 
     #[ORM\Column(length: 255, nullable: true)]

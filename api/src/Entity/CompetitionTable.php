@@ -3,46 +3,63 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CompetitionTableRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompetitionTableRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['competition_table:read']],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['competition' => 'exact'])]
 class CompetitionTable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private int $id;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['competition_table:read'])]
     private ?string $club = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?int $position = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?int $win = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?int $draw = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?int $lost = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?int $goalsScored = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?int $goalsReceived = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?int $points = null;
 
     #[ORM\ManyToOne(inversedBy: 'competitionTables')]
+    #[Groups(['competition_table:read'])]
     private ?Competition $competition = null;
 
     #[ORM\Column]
+    #[Groups(['competition_table:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): int

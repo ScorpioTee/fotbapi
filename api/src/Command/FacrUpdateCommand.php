@@ -13,7 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Doctrine\ORM\EntityManagerInterface;
 
-
 #[AsCommand(
     name: 'facr:update-tables',
     description: 'Update competitions.',
@@ -41,6 +40,9 @@ class FacrUpdateCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        $this->facrParserService->loadMatchStatistics();
+        return Command::SUCCESS;
+
         $competitionTableRepository = $this->entityManager->getRepository(CompetitionTable::class);
         $competitionRepository = $this->entityManager->getRepository(Competition::class);
 
@@ -58,6 +60,7 @@ class FacrUpdateCommand extends Command
             }
             $competitionTableRepository->updateCompetitionTable($this->facrParserService->getData());
             $io->info(sprintf('Competition `%s` was updated.', $competition->getName()));
+            $this->facrParserService->resetData();
         }
         $io->info('All competitions were updated.');
 

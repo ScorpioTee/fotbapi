@@ -3,38 +3,52 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\CompetitionMatchRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: CompetitionMatchRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['competition_match:read']],
+)]
+#[ApiFilter(SearchFilter::class, properties: ['competition' => 'exact'])]
 class CompetitionMatch
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['competition_match:read'])]
     private int $id;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['competition_match:read'])]
     private ?\DateTimeInterface $dateTime = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['competition_match:read'])]
     private ?string $home = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['competition_match:read'])]
     private ?string $away = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['competition_match:read'])]
     private ?int $homeScore = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['competition_match:read'])]
     private ?int $awayScore = null;
 
     #[ORM\Column]
+    #[Groups(['competition_match:read'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'competitionMatches')]
+    #[Groups(['competition_match:read'])]
     private ?Competition $competition = null;
 
     public function getId(): int
